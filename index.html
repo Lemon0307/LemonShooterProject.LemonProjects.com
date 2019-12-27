@@ -4,6 +4,8 @@
 <title>LEMON SHOOTER</title>	
 <link href="style.css" type="stylesheet" rel="text/css">
 <style>
+	@import url('https://fonts.googleapis.com/css?family=Kulim+Park&display=swap');
+
 	#hero {
 background-color: black;
 border-radius: 5px;
@@ -43,10 +45,29 @@ left: 120px;
 top: 200px;
 visibility: hidden;
 }
-body {
+#background {
 background-color: grey;
+width: 480;
+height: 900;
 }
 
+#GameName {
+margin: 10px;
+position: relative;
+left: 500px;
+bottom: 700px;
+font-size: 25pt;
+font-family:'Kulim Park', sans-serif;;
+}
+
+#GameMaker {
+margin: 10px;
+position: relative;
+left: 500px;
+bottom: 700px;
+font-size: 10pt;
+font-family: monospace;
+}
 
 </style>
 </head>
@@ -56,6 +77,9 @@ background-color: grey;
 <div id="laser"></div>
 <div id="score"></div>
 <div id="gameover">GAME OVER</div>
+<h1 id="GameName">LEMON SHOOTER</h1>
+<h3 id="GameMaker">By Lemonadetv</h3>
+
 <script>
 
 var LEFT_KEY = 65;
@@ -116,11 +140,11 @@ sprite.x = 40;
 if (!ignoreY && sprite.y < 40) {
 sprite.y = 40;
 }
-if (sprite.x + sprite.w > 480) {
-sprite.x = 480 - sprite.w;
+if (sprite.x + sprite.w > 460) {
+sprite.x = 460 - sprite.w;
 }
-if (!ignoreY && sprite.y + sprite.h > 900) {
-sprite.y = 900 - sprite.h;
+if (!ignoreY && sprite.y + sprite.h > 880) {
+sprite.y = 880 - sprite.h;
 }
 
 }
