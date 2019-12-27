@@ -14,7 +14,7 @@ position: absolute;
 
 #laser {
 background: #00ff00;
-width: 2px;
+width: 10px;
 height: 50px;
 position: absolute;
 }
@@ -72,6 +72,10 @@ var iterations = 0;
 var controller = new Object();
 var enemies = new Array();
 
+// sound
+var fxLaser = new Sound("sounds/Player-Shoot.mp3", 5, 0.5);
+var fxselfDeath = new Sound("sounds/Player-Death.mp3");
+var fxEnemyDeath = new Sound("sounds/Death-effect.mp3", 10, 0.5);
 function createSprite (element, x, y, w, h) {
 	var result = new Object();
 	result.element = element;
@@ -141,6 +145,7 @@ function handleControls() {
 		hero.x += HERO_MOVEMENT;
 	}
 	if (controller.space && laser.y <= -120) {
+		fxLaser.play();
 		laser.x = hero.x + 9;
 		laser.y = hero.y - laser.h;
 	}
@@ -148,9 +153,24 @@ function handleControls() {
 	ensureBounds(hero);
 }
 
+function Sound(src, lemonStreams = 1, vol = 1.0) {
+	this.streamNum = 0;
+	this.streams = [];
+	for (var i = 0; i < lemonStreams;i++) {
+		this.streams.push(new Audio(src));
+		this.streams[i].volume = vol;
+	}
+
+	this.play = function() {
+		this.streamNum = (this.streamNum + 1) % lemonStreams;
+		this.streams[this.streamNum].play();
+	}
+}
+
 function checkCollisions() {
 	for (var i = 0; i < enemies.length; i++) {
 		if (intersects(laser, enemies[i])) {
+			fxEnemyDeath.play();
 			var element = document.getElementById(enemies[i].element);
 			element.style.visibility = 'hidden';
 			element.parentNode.removeChild(element);
@@ -160,9 +180,10 @@ function checkCollisions() {
 			score += 1;
 		}
 		else if (intersects(hero, enemies[i])) {
+			fxselfDeath.play();
 			gameOver();
-		}
-
+			}
+		
 		else if (enemies[i].y + enemies[i].h >= 900) {
 		var element = document.getElementById(enemies[i].element);
 			element.style.visibility = 'hidden';
@@ -172,13 +193,13 @@ function checkCollisions() {
 		}
 	}
 }
-
 function gameOver () {
 	var element = document.getElementById(hero.element);
 	element.style.visibility = 'hidden';
 	element = document.getElementById('gameover');
 	element.style.visibility = 'visible';
-}
+	
+	}
 
 function showSprites() {
 setPosition(hero);
@@ -203,7 +224,7 @@ function updatePositions () {
 function addEnemy () {
 	var interval = 100;
 	if (iterations > 1500) {
-		interval = 10;
+		interval = 20;
 	}
 	else if (iterations > 1000) {
 	interval = 40;
